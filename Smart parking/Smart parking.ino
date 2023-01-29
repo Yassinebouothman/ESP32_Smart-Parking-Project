@@ -1,3 +1,7 @@
+
+//I used arduino cloud IoT platform for this project
+
+
 #include "arduino_secrets.h"
 #include <LiquidCrystal_I2C.h>
 #include <Wire.h> 
@@ -7,11 +11,8 @@
 
 LiquidCrystal_I2C lcd(0x27,16,2);
 Servo barrier;
-// #define ssid "TOPNET_2EE0"
-// #define password "1mpve8v7es"
-// #define BLYNK_TEMPLATE_ID "TMPLqZCv-GvH"
-// #define BLYNK_DEVICE_NAME "Smart Parking"
-// #define BLYNK_AUTH_TOKEN "CCJdnjGGtfWtqVcCiKRn5TpBuG1TY3md"
+// #define ssid ""
+// #define password ""
 
 const int ledg = 14;
 const int ledr = 12;
@@ -24,7 +25,6 @@ int flag1 = 0;
 int flag2 = 0;
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(9600);
   delay(1500);
 
@@ -68,11 +68,10 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
   ArduinoCloud.update();
 
       lcd.setCursor(4,0);
-    lcd.print("Welcome!");
+      lcd.print("Welcome!");
       lcd.setCursor(2,1);
       lcd.print("Spots left=");
       lcd.setCursor(14,1)  ;    
@@ -118,15 +117,3 @@ void loop() {
 
   }
 
-
-/*
-  Since SpotsAvailable is READ_WRITE variable, onSpotsAvailableChange() is
-  executed every time a new value is received from IoT Cloud.
-*/
-/*
-  Since SpotsAvailable is READ_WRITE variable, onSpotsAvailableChange() is
-  executed every time a new value is received from IoT Cloud.
-*/
-void onSpotsAvailableChange()  {
-  // Add your code here to act upon SpotsAvailable change
-}
