@@ -4,7 +4,7 @@
 
 #include "arduino_secrets.h"
 #include <LiquidCrystal_I2C.h>
-#include <Wire.h> 
+#include <Wire.h>                                   //including necessary libraries 
 // #include <WiFi.h>
 #include <ESP32Servo.h>
 #include "thingProperties.h"
@@ -16,7 +16,7 @@ Servo barrier;
 
 const int ledg = 14;
 const int ledr = 12;
-const int sensor1 = 5;
+const int sensor1 = 5;                  // assigning pins to sensors and actuators
 const int sensor2 = 16;
 
 const int brightness = 34;
@@ -29,12 +29,12 @@ void setup() {
   delay(1500);
 
   pinMode(sensor1, INPUT);
-  pinMode(sensor2, INPUT);
+  pinMode(sensor2, INPUT);                  // pins initialisation
   pinMode(ledr, OUTPUT);
   pinMode(ledg, OUTPUT);
 
   lcd.init();
-  lcd.backlight();
+  lcd.backlight();                          //LCD initialisation
   analogWrite(brightness, 100);
 
 
@@ -61,27 +61,26 @@ void setup() {
     lcd.clear();
   initProperties();
   ArduinoCloud.begin(ArduinoIoTPreferredConnection,false);
-  setDebugMessageLevel(2);
+  setDebugMessageLevel(2);                                              // initialisation of arduino cloud
   ArduinoCloud.printDebugInfo();
   
 
 }
 
 void loop() {
-  ArduinoCloud.update();
-
+  ArduinoCloud.update();                          
       lcd.setCursor(4,0);
       lcd.print("Welcome!");
       lcd.setCursor(2,1);
-      lcd.print("Spots left=");
+      lcd.print("Spots left=");                                   // Writing on the LCD  
       lcd.setCursor(14,1)  ;    
       lcd.print(spots_available);
       
   if(digitalRead(sensor1) == LOW && flag1==0){
-    if(spots_available > 0){
+    if(spots_available > 0){                                  
       flag1 = 1;
-      if (flag2 == 0){
-        barrier.write(90);
+      if (flag2 == 0){                                              // when a car is entering the parking and there's spots available
+        barrier.write(90);                                           // Barrier is open
         digitalWrite(ledg, HIGH);
         digitalWrite(ledr, LOW);        
         spots_available = spots_available - 1;
@@ -89,7 +88,7 @@ void loop() {
       }
     }
     else{
-      digitalWrite(ledr, HIGH);
+      digitalWrite(ledr, HIGH);                                       // when a car wants to enter and there's no spots available
       digitalWrite(ledg, LOW);
      
 
@@ -99,8 +98,8 @@ void loop() {
   if(digitalRead(sensor2) == LOW && flag2 == 0){
     flag2 = 1;
     if(flag1 == 0){
-      barrier.write(90);
-      digitalWrite(ledg, HIGH);
+      barrier.write(90);                                              // when a car is leaving the parking
+      digitalWrite(ledg, HIGH);                                       // Barrier is open
       digitalWrite(ledr, LOW);
       spots_available = spots_available + 1;
 
@@ -110,7 +109,7 @@ void loop() {
   if(flag1 == 1 && flag2 == 1){
     delay (250);
     barrier.write(180);
-    digitalWrite(ledr, LOW);
+    digitalWrite(ledr, LOW);                              // Closing the barrier
     digitalWrite(ledg, LOW);
     flag1 = 0, flag2 = 0;
   }
